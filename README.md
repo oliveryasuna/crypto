@@ -1,6 +1,6 @@
 # Crypto
 
-Time-Based One-Time Password ([RFC 6238](https://datatracker.ietf.org/doc/html/rfc6238)) and HMAC-Baed One-Time Password
+Time-Based One-Time Password ([RFC 6238](https://datatracker.ietf.org/doc/html/rfc6238)) and HMAC-Based One-Time Password
 ([RFC 4226](https://datatracker.ietf.org/doc/html/rfc4226)) reference implementations and more.
 
 ## Getting Started
