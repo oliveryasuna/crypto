@@ -52,11 +52,17 @@ byte[] input = "Hello, World!".getBytes();
 byte[] hash = SHA1.getInstance().compute(input);
 ```
 
-### Utility class `Keys`
+### Utility classes' methods
 
-* `generate(String algorithm, SecureRandom secureRandom)`
-* `generate(String algorithm, int keySize)`
-* `generate(String algorithm)`
+`Keys`:
+* `byte[] generate(String algorithm, SecureRandom secureRandom)` – Generates a key, specifying the algorithm and `SecureRandom`.
+* `byte[] generate(String algorithm, int keySize)` – Generates a key, specifying the algorithm and key size in bytes.
+* `byte[] generate(String algorithm)` – Generates a key, specifying the algorithm.
+
+`Bytes`:
+* `byte[] concatenate(byte[] array, byte[]... arrays)` – Concatenates n-arrays.
+* `byte[] xor(byte[] array1, byte[] array2)` – XOR operation on two arrays.
+* `byte[] toHex(byte[] bytes)` – Converts bytes to hexadecimal bytes.
 
 ## License
 

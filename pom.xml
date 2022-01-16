@@ -98,8 +98,8 @@
     ==================================================-->
 
     <name>Java Crypto</name>
-    <description/> <!-- TODO. -->
-    <url/> <!-- TODO. -->
+    <description>TOTP (RFC 6238) and HOTP (RFC 4226) reference implementations and more.</description>
+    <url>https://github.com/oliveryasuna/crypto</url>
     <inceptionYear>2021</inceptionYear>
     <licenses>
         <license>
@@ -129,12 +129,19 @@
     ==== Environment
     ==================================================-->
 
-    <issueManagement/> <!-- TODO. -->
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/oliveryasuna/crypto/issues</url>
+    </issueManagement>
     <ciManagement/>
 
     <mailingLists/>
 
-    <scm/> <!-- TODO. -->
+    <scm>
+        <url>https://github.com/oliveryasuna/crypto</url>
+        <connection>scm:git:git://github.com/oliveryasuna/crypto.git</connection>
+        <developerConnection>scm:git:git://github.com/oliveryasuna/crypto.git</developerConnection>
+    </scm>
 
     <repositories/>
     <pluginRepositories/>
