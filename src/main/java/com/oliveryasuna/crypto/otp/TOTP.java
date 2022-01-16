@@ -21,32 +21,32 @@ package com.oliveryasuna.crypto.otp;
 import com.oliveryasuna.commons.language.Arguments;
 import com.oliveryasuna.commons.language.marker.Immutable;
 import com.oliveryasuna.crypto.hash.HashFunction;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Objects;
 
 @Immutable
-public class TOTP {
+public class TOTP extends HOTP {
 
   // Constructors
   //--------------------------------------------------
 
   public TOTP(final int length, final Duration timeStep, final Instant startTime, final byte[] key, final HashFunction hashFunction) {
-    super();
+    super(length, key, hashFunction);
 
     Arguments.requireNotNull(timeStep, "timeStep");
     Arguments.requireFalse(timeStep.isZero(), "timeStep");
     Arguments.requireFalse(timeStep.isNegative(), "timeStep");
     Arguments.requireNotNull(startTime, "startTime");
 
-    this.hotp = new HOTP(length, key, hashFunction);
-
     this.timeStep = timeStep;
-    this.timeStepMillis = timeStep.toMillis();
+    this.timeStepMilliseconds = timeStep.toMillis();
 
     this.startTime = startTime;
-    this.startTimeMillis = startTime.toEpochMilli();
+    this.startTimeMilliseconds = startTime.toEpochMilli();
   }
 
   public TOTP(final int length, final Duration timeStep, final byte[] key, final HashFunction hashFunction) {
@@ -56,15 +56,21 @@ public class TOTP {
   // Fields
   //--------------------------------------------------
 
-  protected HOTP hotp;
-
   protected final Duration timeStep;
 
-  protected final long timeStepMillis;
+  protected final long timeStepMilliseconds;
 
   protected final Instant startTime;
 
-  protected final long startTimeMillis;
+  protected final long startTimeMilliseconds;
+
+  // HOTP methods
+  //--------------------------------------------------
+
+  @Override
+  public int compute(final long epochMilliseconds) throws Exception {
+    return super.compute(computeCounter(epochMilliseconds));
+  }
 
   // Methods
   //--------------------------------------------------
@@ -73,11 +79,11 @@ public class TOTP {
     Arguments.requireNotNull(time, "time");
     Arguments.requireGreaterOrSame(time, getStartTime(), "time");
 
-    return hotp.compute(computeCounter(time));
+    return compute(time.toEpochMilli());
   }
 
-  private long computeCounter(final Instant time) {
-    return ((time.toEpochMilli() - startTimeMillis) / timeStepMillis);
+  private long computeCounter(final long epochMilliseconds) {
+    return ((epochMilliseconds - startTimeMilliseconds) / timeStepMilliseconds);
   }
 
   // Getters
@@ -101,23 +107,31 @@ public class TOTP {
 
     final TOTP objectCasted = (TOTP)object;
 
-    return (hotp.equals(objectCasted.hotp) && timeStep.equals(objectCasted.timeStep) && startTime.equals(objectCasted.startTime));
+    return new EqualsBuilder()
+        .appendSuper(super.equals(object))
+        .append(timeStep, objectCasted.timeStep)
+        .append(startTime, objectCasted.startTime)
+        .isEquals();
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(hotp, timeStep, startTime);
+    return new HashCodeBuilder(17, 37)
+        .appendSuper(super.hashCode())
+        .append(timeStep)
+        .append(startTime)
+        .toHashCode();
   }
 
   @Override
   public String toString() {
-    return ("TOTP{" +
-        "hotp=" + hotp +
-        ", timeStep=" + timeStep +
-        ", timeStepMillis=" + timeStepMillis +
-        ", startTime=" + startTime +
-        ", startTimeMillis=" + startTimeMillis +
-        '}');
+    return new ToStringBuilder(this)
+        .appendSuper(super.toString())
+        .append("timeStep", timeStep)
+        .append("timeStepMilliseconds", timeStepMilliseconds)
+        .append("startTime", startTime)
+        .append("startTimeMilliseconds", startTimeMilliseconds)
+        .toString();
   }
 
 }

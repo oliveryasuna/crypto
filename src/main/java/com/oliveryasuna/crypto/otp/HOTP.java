@@ -22,10 +22,11 @@ import com.oliveryasuna.commons.language.Arguments;
 import com.oliveryasuna.commons.language.marker.Immutable;
 import com.oliveryasuna.crypto.hash.HashFunction;
 import com.oliveryasuna.crypto.mac.HMAC;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.Objects;
 
 @Immutable
 public class HOTP {
@@ -111,26 +112,32 @@ public class HOTP {
 
     final HOTP objectCasted = (HOTP)object;
 
-    return (length == objectCasted.length && modDivisor == objectCasted.modDivisor && Arrays.equals(key, objectCasted.key) &&
-        hashFunction.equals(objectCasted.hashFunction));
+    return new EqualsBuilder()
+        .append(length, objectCasted.length)
+        .append(modDivisor, objectCasted.modDivisor)
+        .append(key, objectCasted.key)
+        .append(hashFunction, objectCasted.hashFunction)
+        .isEquals();
   }
 
   @Override
   public int hashCode() {
-    int result = Objects.hash(length, modDivisor, hashFunction);
-    result = 31 * result + Arrays.hashCode(key);
-
-    return result;
+    return new HashCodeBuilder(17, 37)
+        .append(length)
+        .append(modDivisor)
+        .append(key)
+        .append(hashFunction)
+        .toHashCode();
   }
 
   @Override
   public String toString() {
-    return ("HOTP{" +
-        "length=" + length +
-        ", modDivisor=" + modDivisor +
-        ", key=" + Arrays.toString(key) +
-        ", hashFunction=" + hashFunction +
-        '}');
+    return new ToStringBuilder(this)
+        .append("length", length)
+        .append("modDivisor", modDivisor)
+        .append("key", key)
+        .append("hashFunction", hashFunction)
+        .toString();
   }
 
 }
