@@ -26,14 +26,14 @@ import java.security.MessageDigest;
 
 @Singleton
 @Immutable
-public class SHA512t224 implements HashFunction {
+public class SHA512_256 implements HashFunction {
 
   // Singleton pattern
   //--------------------------------------------------
 
-  private static final SHA512t224 INSTANCE = new SHA512t224();
+  private static final SHA512_256 INSTANCE = new SHA512_256();
 
-  public static SHA512t224 getInstance() {
+  public static SHA512_256 getInstance() {
     return INSTANCE;
   }
 
@@ -44,7 +44,7 @@ public class SHA512t224 implements HashFunction {
 
   public static final int BLOCK_SIZE = 1024 / 8;
 
-  public static final int OUTPUT_SIZE = 224 / 8;
+  public static final int OUTPUT_SIZE = 256 / 8;
 
   // HashFunction methods
   //--------------------------------------------------
