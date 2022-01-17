@@ -22,6 +22,8 @@ import com.oliveryasuna.commons.language.Arguments;
 import com.oliveryasuna.commons.language.marker.Immutable;
 import com.oliveryasuna.crypto.hash.HashFunction;
 import com.oliveryasuna.crypto.util.Bytes;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Arrays;
@@ -34,7 +36,7 @@ import java.util.Arrays;
  * @author Oliver Yasuna
  */
 @Immutable
-public class HMAC extends MAC {
+public class HMAC implements IMAC {
 
   // Static fields
   //--------------------------------------------------
@@ -47,7 +49,13 @@ public class HMAC extends MAC {
   //--------------------------------------------------
 
   public HMAC(final byte[] key, final HashFunction hashFunction) throws Exception {
-    super(key, hashFunction);
+    super();
+
+    Arguments.requireNotNull(key, "key");
+    Arguments.requireNotNull(hashFunction, "hashFunction");
+
+    this.key = key;
+    this.hashFunction = hashFunction;
 
     final byte[][] paddedKeys = computePaddedKeys();
 
@@ -90,9 +98,13 @@ public class HMAC extends MAC {
   // Fields
   //--------------------------------------------------
 
+  protected final byte[] key;
+
   protected final byte[] outerPaddedKey;
 
   protected final byte[] innerPaddedKey;
+
+  protected final HashFunction hashFunction;
 
   // IMAC methods
   //--------------------------------------------------
@@ -104,8 +116,22 @@ public class HMAC extends MAC {
     return hashFunction.compute(Bytes.concatenate(outerPaddedKey, hashFunction.compute(Bytes.concatenate(innerPaddedKey, message))));
   }
 
+  @Override
+  public boolean verify(final byte[] message, final byte[] tag) throws Exception {
+    Arguments.requireNotNull(message, "message");
+    Arguments.requireNotNull(tag, "tag");
+
+    final byte[] expectedTag = sign(message);
+
+    return Arrays.equals(expectedTag, tag);
+  }
+
   // Getters
   //--------------------------------------------------
+
+  public byte[] getKey() {
+    return Arrays.copyOf(key, key.length);
+  }
 
   public byte[] getOuterPaddedKey() {
     return outerPaddedKey.clone();
@@ -115,8 +141,33 @@ public class HMAC extends MAC {
     return innerPaddedKey.clone();
   }
 
+  public HashFunction getHashFunction() {
+    return hashFunction;
+  }
+
   // Object methods
   //--------------------------------------------------
+
+  @Override
+  public boolean equals(final Object object) {
+    if(this == object) return true;
+    if(object == null || getClass() != object.getClass()) return false;
+
+    final HMAC objectCasted = (HMAC)object;
+
+    return new EqualsBuilder()
+        .append(key, objectCasted.key)
+        .append(hashFunction, objectCasted.hashFunction)
+        .isEquals();
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(17, 37)
+        .append(key)
+        .append(hashFunction)
+        .toHashCode();
+  }
 
   @Override
   public String toString() {
