@@ -30,15 +30,22 @@ hotp.compute(0L);
 ```java
 byte[] input = "Hello, World!".getBytes();
 
-// Generate a key.
-byte[] key = HMAC.getInstance().generateKey("AES");
-// Sign the input using SHA-1.
-byte[] tag = HMAC.getInstance().sign(input, key, SHA1.getInstance());
+// Create an HMAC instance.
+HMAC hmac = new HMAC(Keys.generate("AES"), SHA1.getInstance());
+
+// Sign the input.
+byte[] tag = hmac.sign(input);
 
 ...
 
 // Verify the input later.
-boolean valid = HMAC.getInstance().verify(input, tag, key, SHA1.getInstance());
+boolean valid = hmac.verify(input, tag);
+```
+
+Alternatively, you can use `JceMAC`, which wraps JCE's `Mac`:
+
+```java
+JceMac hmac = new JceMac(Keys.generate("AES"), "HmacSHA1");
 ```
 
 ### Hashing
