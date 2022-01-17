@@ -23,6 +23,9 @@ import com.oliveryasuna.commons.language.marker.Immutable;
 import com.oliveryasuna.crypto.hash.HashFunction;
 import com.oliveryasuna.crypto.util.Bytes;
 import com.oliveryasuna.crypto.util.Keys;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -114,6 +117,38 @@ public class HMAC implements IMAC {
     } else {
       return key;
     }
+  }
+
+  // Object methods
+  //--------------------------------------------------
+
+  @Override
+  public boolean equals(final Object object) {
+    if(this == object) return true;
+    if(object == null || getClass() != object.getClass()) return false;
+
+    final HMAC objectCasted = (HMAC)object;
+
+    return new EqualsBuilder()
+        .append(key, objectCasted.key)
+        .append(hashFunction, objectCasted.hashFunction)
+        .isEquals();
+  }
+
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(17, 37)
+        .append(key)
+        .append(hashFunction)
+        .toHashCode();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("key", key)
+        .append("hashFunction", hashFunction)
+        .toString();
   }
 
 }
