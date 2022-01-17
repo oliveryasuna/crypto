@@ -43,6 +43,8 @@ public interface HashFunction {
    * E.g., 64 bytes for SHA-1.
    *
    * @return The block size in bytes.
+   *
+   * @implSpec The return value must never change.
    */
   int blockSize();
 
@@ -52,6 +54,8 @@ public interface HashFunction {
    * E.g., 20 bytes for SHA-1.
    *
    * @return The output size in bytes.
+   *
+   * @implSpec The return value must never change.
    */
   int outputSize();
 

@@ -34,7 +34,7 @@ public class TOTP extends HOTP {
   // Constructors
   //--------------------------------------------------
 
-  public TOTP(final int length, final Duration timeStep, final Instant startTime, final byte[] key, final HashFunction hashFunction) {
+  public TOTP(final int length, final Duration timeStep, final Instant startTime, final byte[] key, final HashFunction hashFunction) throws Exception {
     super(length, key, hashFunction);
 
     Arguments.requireNotNull(timeStep, "timeStep");
@@ -49,7 +49,7 @@ public class TOTP extends HOTP {
     this.startTimeMilliseconds = startTime.toEpochMilli();
   }
 
-  public TOTP(final int length, final Duration timeStep, final byte[] key, final HashFunction hashFunction) {
+  public TOTP(final int length, final Duration timeStep, final byte[] key, final HashFunction hashFunction) throws Exception {
     this(length, timeStep, Instant.now(), key, hashFunction);
   }
 

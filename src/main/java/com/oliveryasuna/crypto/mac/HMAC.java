@@ -27,7 +27,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 /**
@@ -50,7 +49,7 @@ public class HMAC implements IMAC {
   // Constructors
   //--------------------------------------------------
 
-  public HMAC(final byte[] key, final HashFunction hashFunction) {
+  public HMAC(final byte[] key, final HashFunction hashFunction) throws Exception {
     super();
 
     Arguments.requireNotNull(key, "key");
@@ -58,26 +57,21 @@ public class HMAC implements IMAC {
 
     this.key = key;
     this.hashFunction = hashFunction;
+
+    final byte[][] paddedKeys = computePaddedKeys();
+
+    this.outerPaddedKey = paddedKeys[0];
+    this.innerPaddedKey = paddedKeys[1];
   }
 
-  public HMAC(final String keyAlgorithm, final HashFunction hashFunction) throws NoSuchAlgorithmException {
+  public HMAC(final String keyAlgorithm, final HashFunction hashFunction) throws Exception {
     this(Keys.generate(Arguments.requireNotNull(keyAlgorithm, "keyAlgorithm")), hashFunction);
   }
 
-  // Fields
+  // Constructor helper methods
   //--------------------------------------------------
 
-  private final byte[] key;
-
-  private final HashFunction hashFunction;
-
-  // IMAC methods
-  //--------------------------------------------------
-
-  @Override
-  public byte[] sign(final byte[] message) throws Exception {
-    Arguments.requireNotNull(message, "message");
-
+  private byte[][] computePaddedKeys() throws Exception {
     final byte[] blockSizedKey = computeBlockSizedKey(key, hashFunction);
 
     final byte[] outerPadding = new byte[hashFunction.blockSize()];
@@ -89,21 +83,8 @@ public class HMAC implements IMAC {
     final byte[] outerPaddedKey = Bytes.xor(blockSizedKey, outerPadding);
     final byte[] innerPaddedKey = Bytes.xor(blockSizedKey, innerPadding);
 
-    return hashFunction.compute(Bytes.concatenate(outerPaddedKey, hashFunction.compute(Bytes.concatenate(innerPaddedKey, message))));
+    return new byte[][] {outerPaddedKey, innerPaddedKey};
   }
-
-  @Override
-  public boolean verify(final byte[] message, final byte[] tag) throws Exception {
-    Arguments.requireNotNull(message, "message");
-    Arguments.requireNotNull(tag, "tag");
-
-    final byte[] expectedTag = sign(message);
-
-    return Arrays.equals(expectedTag, tag);
-  }
-
-  // Helper methods
-  //--------------------------------------------------
 
   private byte[] computeBlockSizedKey(final byte[] key, final HashFunction hashFunction) throws Exception {
     final int blockSize = hashFunction.blockSize();
@@ -117,6 +98,37 @@ public class HMAC implements IMAC {
     } else {
       return key;
     }
+  }
+
+  // Fields
+  //--------------------------------------------------
+
+  private final byte[] key;
+
+  private final byte[] outerPaddedKey;
+
+  private final byte[] innerPaddedKey;
+
+  private final HashFunction hashFunction;
+
+  // IMAC methods
+  //--------------------------------------------------
+
+  @Override
+  public byte[] sign(final byte[] message) throws Exception {
+    Arguments.requireNotNull(message, "message");
+
+    return hashFunction.compute(Bytes.concatenate(outerPaddedKey, hashFunction.compute(Bytes.concatenate(innerPaddedKey, message))));
+  }
+
+  @Override
+  public boolean verify(final byte[] message, final byte[] tag) throws Exception {
+    Arguments.requireNotNull(message, "message");
+    Arguments.requireNotNull(tag, "tag");
+
+    final byte[] expectedTag = sign(message);
+
+    return Arrays.equals(expectedTag, tag);
   }
 
   // Object methods

@@ -43,7 +43,7 @@ public class HOTP {
   // Constructors
   //--------------------------------------------------
 
-  public HOTP(final int length, final byte[] key, final HashFunction hashFunction) {
+  public HOTP(final int length, final byte[] key, final HashFunction hashFunction) throws Exception {
     super();
 
     Arguments.requireGreaterOrSame(length, 0, "length");
