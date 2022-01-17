@@ -22,12 +22,10 @@ import com.oliveryasuna.commons.language.Arguments;
 import com.oliveryasuna.commons.language.marker.Immutable;
 import com.oliveryasuna.crypto.hash.HashFunction;
 import com.oliveryasuna.crypto.util.Bytes;
-import com.oliveryasuna.crypto.util.Keys;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 /**
@@ -53,16 +51,12 @@ public class MAC implements IMAC {
     this.hashFunction = hashFunction;
   }
 
-  public MAC(final String keyAlgorithm, final HashFunction hashFunction) throws NoSuchAlgorithmException {
-    this(Keys.generate(Arguments.requireNotNull(keyAlgorithm, "keyAlgorithm")), hashFunction);
-  }
-
   // Fields
   //--------------------------------------------------
 
-  private final byte[] key;
+  protected final byte[] key;
 
-  private final HashFunction hashFunction;
+  protected final HashFunction hashFunction;
 
   // IMAC methods
   //--------------------------------------------------
@@ -82,6 +76,17 @@ public class MAC implements IMAC {
     final byte[] expectedTag = sign(message);
 
     return Arrays.equals(expectedTag, tag);
+  }
+
+  // Getters
+  //--------------------------------------------------
+
+  public byte[] getKey() {
+    return Arrays.copyOf(key, key.length);
+  }
+
+  public HashFunction getHashFunction() {
+    return hashFunction;
   }
 
   // Object methods
