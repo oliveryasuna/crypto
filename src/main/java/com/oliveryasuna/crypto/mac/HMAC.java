@@ -37,7 +37,7 @@ import java.util.Arrays;
  */
 @Singleton
 @Immutable
-public class HMAC implements MAC {
+public class HMAC implements IMAC {
 
   // Singleton pattern
   //--------------------------------------------------

@@ -18,47 +18,72 @@
 
 package com.oliveryasuna.crypto.mac;
 
+import com.oliveryasuna.commons.language.Arguments;
+import com.oliveryasuna.commons.language.marker.Immutable;
+import com.oliveryasuna.commons.language.marker.Singleton;
 import com.oliveryasuna.crypto.hash.HashFunction;
+import com.oliveryasuna.crypto.util.Bytes;
+import com.oliveryasuna.crypto.util.Keys;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 /**
- * Represents a Message Authentication Code system.
+ * Represents a basic Message Authentication Code system.
+ * <p>
+ * MAC is backed by a cryptographic hash function.
  *
  * @author Oliver Yasuna
  */
-public interface MAC {
+@Singleton
+@Immutable
+public class MAC implements IMAC {
 
-  /**
-   * Generates a random key.
-   *
-   * @return The random key.
-   *
-   * @throws NoSuchAlgorithmException If the algorithm is invalid.
-   */
-  byte[] generateKey(String algorithm) throws NoSuchAlgorithmException;
+  // Singleton pattern
+  //--------------------------------------------------
 
-  /**
-   * Signs a message given a key.
-   *
-   * @param message      The message.
-   * @param key          The key.
-   * @param hashFunction The hash function.
-   *
-   * @return The message, signed, i.e., the tag.
-   */
-  byte[] sign(byte[] message, byte[] key, HashFunction hashFunction) throws Exception;
+  private static final MAC INSTANCE = new MAC();
 
-  /**
-   * Verifies the authenticity of a message given a key and tag.
-   *
-   * @param message      The message.
-   * @param tag          The tag.
-   * @param key          The key.
-   * @param hashFunction The hash function.
-   *
-   * @return {@code true}, if the message is authentic; otherwise, {@code false}.
-   */
-  boolean verify(byte[] message, byte[] tag, byte[] key, HashFunction hashFunction) throws Exception;
+  public static MAC getInstance() {
+    return INSTANCE;
+  }
+
+  // Constructors
+  //--------------------------------------------------
+
+  protected MAC() {
+    super();
+  }
+
+  // MAC methods
+  //--------------------------------------------------
+
+  @Override
+  public byte[] generateKey(final String algorithm) throws NoSuchAlgorithmException {
+    Arguments.requireNotNull(algorithm, "algorithm");
+
+    return Keys.generate(algorithm);
+  }
+
+  @Override
+  public byte[] sign(final byte[] message, final byte[] key, final HashFunction hashFunction) throws Exception {
+    Arguments.requireNotNull(message, "message");
+    Arguments.requireNotNull(key, "key");
+    Arguments.requireNotNull(hashFunction, "hashFunction");
+
+    return hashFunction.compute(Bytes.concatenate(key, message));
+  }
+
+  @Override
+  public boolean verify(final byte[] message, final byte[] tag, final byte[] key, final HashFunction hashFunction) throws Exception {
+    Arguments.requireNotNull(message, "message");
+    Arguments.requireNotNull(tag, "tag");
+    Arguments.requireNotNull(key, "key");
+    Arguments.requireNotNull(hashFunction, "hashFunction");
+
+    final byte[] expectedTag = sign(message, key, hashFunction);
+
+    return Arrays.equals(expectedTag, tag);
+  }
 
 }
