@@ -56,6 +56,8 @@ public class HOTP {
 
     this.key = key;
     this.hashFunction = hashFunction;
+
+    this.hmac = new HMAC(key, hashFunction);
   }
 
   // Fields
@@ -69,6 +71,8 @@ public class HOTP {
 
   protected final HashFunction hashFunction;
 
+  protected final HMAC hmac;
+
   // Methods
   //--------------------------------------------------
 
@@ -79,7 +83,7 @@ public class HOTP {
 
     buffer.putLong(counter);
 
-    final byte[] hash = HMAC.getInstance().sign(buffer.array(), key, hashFunction);
+    final byte[] hash = hmac.sign(buffer.array());
 
     final int offset = hash[hash.length - 1] & 0xf;
     final int binary = ((hash[offset] & 0x7f) << 24) | ((hash[offset + 1] & 0xff) << 16) | ((hash[offset + 2] & 0xff) << 8) | (hash[offset + 3] & 0xff);

@@ -20,7 +20,6 @@ package com.oliveryasuna.crypto.mac;
 
 import com.oliveryasuna.commons.language.Arguments;
 import com.oliveryasuna.commons.language.marker.Immutable;
-import com.oliveryasuna.commons.language.marker.Singleton;
 import com.oliveryasuna.crypto.hash.HashFunction;
 import com.oliveryasuna.crypto.util.Bytes;
 import com.oliveryasuna.crypto.util.Keys;
@@ -35,53 +34,49 @@ import java.util.Arrays;
  *
  * @author Oliver Yasuna
  */
-@Singleton
 @Immutable
 public class MAC implements IMAC {
-
-  // Singleton pattern
-  //--------------------------------------------------
-
-  private static final MAC INSTANCE = new MAC();
-
-  public static MAC getInstance() {
-    return INSTANCE;
-  }
 
   // Constructors
   //--------------------------------------------------
 
-  protected MAC() {
+  public MAC(final byte[] key, final HashFunction hashFunction) {
     super();
+
+    Arguments.requireNotNull(key, "key");
+    Arguments.requireNotNull(hashFunction, "hashFunction");
+
+    this.key = key;
+    this.hashFunction = hashFunction;
   }
 
-  // MAC methods
+  public MAC(final String keyAlgorithm, final HashFunction hashFunction) throws NoSuchAlgorithmException {
+    this(Keys.generate(Arguments.requireNotNull(keyAlgorithm, "keyAlgorithm")), hashFunction);
+  }
+
+  // Fields
+  //--------------------------------------------------
+
+  private final byte[] key;
+
+  private final HashFunction hashFunction;
+
+  // IMAC methods
   //--------------------------------------------------
 
   @Override
-  public byte[] generateKey(final String algorithm) throws NoSuchAlgorithmException {
-    Arguments.requireNotNull(algorithm, "algorithm");
-
-    return Keys.generate(algorithm);
-  }
-
-  @Override
-  public byte[] sign(final byte[] message, final byte[] key, final HashFunction hashFunction) throws Exception {
+  public byte[] sign(final byte[] message) throws Exception {
     Arguments.requireNotNull(message, "message");
-    Arguments.requireNotNull(key, "key");
-    Arguments.requireNotNull(hashFunction, "hashFunction");
 
     return hashFunction.compute(Bytes.concatenate(key, message));
   }
 
   @Override
-  public boolean verify(final byte[] message, final byte[] tag, final byte[] key, final HashFunction hashFunction) throws Exception {
+  public boolean verify(final byte[] message, final byte[] tag) throws Exception {
     Arguments.requireNotNull(message, "message");
     Arguments.requireNotNull(tag, "tag");
-    Arguments.requireNotNull(key, "key");
-    Arguments.requireNotNull(hashFunction, "hashFunction");
 
-    final byte[] expectedTag = sign(message, key, hashFunction);
+    final byte[] expectedTag = sign(message);
 
     return Arrays.equals(expectedTag, tag);
   }

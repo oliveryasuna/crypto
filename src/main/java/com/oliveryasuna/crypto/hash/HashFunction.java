@@ -22,6 +22,7 @@ package com.oliveryasuna.crypto.hash;
  * Represents a hash function.
  *
  * @author Oliver Yasuna
+ * @implSpec Implementations must be immutable.
  */
 public interface HashFunction {
 

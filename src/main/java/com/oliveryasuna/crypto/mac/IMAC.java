@@ -18,10 +18,6 @@
 
 package com.oliveryasuna.crypto.mac;
 
-import com.oliveryasuna.crypto.hash.HashFunction;
-
-import java.security.NoSuchAlgorithmException;
-
 /**
  * Represents a Message Authentication Code system.
  *
@@ -30,35 +26,22 @@ import java.security.NoSuchAlgorithmException;
 public interface IMAC {
 
   /**
-   * Generates a random key.
+   * Signs a message.
    *
-   * @return The random key.
-   *
-   * @throws NoSuchAlgorithmException If the algorithm is invalid.
-   */
-  byte[] generateKey(String algorithm) throws NoSuchAlgorithmException;
-
-  /**
-   * Signs a message given a key.
-   *
-   * @param message      The message.
-   * @param key          The key.
-   * @param hashFunction The hash function.
+   * @param message The message.
    *
    * @return The message, signed, i.e., the tag.
    */
-  byte[] sign(byte[] message, byte[] key, HashFunction hashFunction) throws Exception;
+  byte[] sign(byte[] message) throws Exception;
 
   /**
    * Verifies the authenticity of a message given a key and tag.
    *
-   * @param message      The message.
-   * @param tag          The tag.
-   * @param key          The key.
-   * @param hashFunction The hash function.
+   * @param message The message.
+   * @param tag     The tag.
    *
    * @return {@code true}, if the message is authentic; otherwise, {@code false}.
    */
-  boolean verify(byte[] message, byte[] tag, byte[] key, HashFunction hashFunction) throws Exception;
+  boolean verify(byte[] message, byte[] tag) throws Exception;
 
 }
