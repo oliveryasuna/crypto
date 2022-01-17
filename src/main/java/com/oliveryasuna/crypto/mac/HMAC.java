@@ -159,6 +159,8 @@ public class HMAC implements IMAC {
   public String toString() {
     return new ToStringBuilder(this)
         .append("key", key)
+        .append("outerPaddedKey", outerPaddedKey)
+        .append("innerPaddedKey", innerPaddedKey)
         .append("hashFunction", hashFunction)
         .toString();
   }
