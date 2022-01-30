@@ -21,142 +21,142 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <!--==================================================
-    ==== Core
-    ==================================================-->
+  <!--==================================================
+  ==== Core
+  ==================================================-->
 
-    <groupId>com.oliveryasuna</groupId>
-    <artifactId>crypto</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+  <groupId>com.oliveryasuna</groupId>
+  <artifactId>crypto</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
 
-    <modules/>
+  <modules/>
 
-    <properties>
-        <!--=========================
-        ==== Encoding
-        =========================-->
+  <properties>
+    <!--=========================
+    ==== Encoding
+    =========================-->
 
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <!--=========================
-        ==== Java version
-        =========================-->
+    <!--=========================
+    ==== Java version
+    =========================-->
 
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+  </properties>
 
-    <dependencyManagement/>
+  <dependencyManagement/>
 
-    <dependencies>
-        <!--=========================
-        ==== Miscellaneous
-        =========================-->
+  <dependencies>
+    <!--=========================
+    ==== Miscellaneous
+    =========================-->
 
-        <!-- Oliver's Commons Language. -->
-        <dependency>
-            <groupId>com.oliveryasuna.commons</groupId>
-            <artifactId>commons-language</artifactId>
-            <version>3.0.0</version>
-        </dependency>
+    <!-- Oliver's Commons Language. -->
+    <dependency>
+      <groupId>com.oliveryasuna.commons</groupId>
+      <artifactId>commons-language</artifactId>
+      <version>3.0.0</version>
+    </dependency>
 
-        <!-- Commons Lang. -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
-        </dependency>
+    <!-- Commons Lang. -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.12.0</version>
+    </dependency>
 
-        <!--=========================
-        ==== Testing
-        =========================-->
+    <!--=========================
+    ==== Testing
+    =========================-->
 
-        <!-- JUnit. -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.8.2</version>
+    <!-- JUnit. -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.8.2</version>
 
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
-    <!--==================================================
-    ==== Build
-    ==================================================-->
+  <!--==================================================
+  ==== Build
+  ==================================================-->
 
-    <build>
-        <plugins>
-            <!-- Maven Surefire Plugin. -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
-            </plugin>
-        </plugins>
-    </build>
+  <build>
+    <plugins>
+      <!-- Maven Surefire Plugin. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M5</version>
+      </plugin>
+    </plugins>
+  </build>
 
-    <reporting/>
+  <reporting/>
 
-    <!--==================================================
-    ==== Details
-    ==================================================-->
+  <!--==================================================
+  ==== Details
+  ==================================================-->
 
-    <name>Java Crypto</name>
-    <description>TOTP (RFC 6238) and HOTP (RFC 4226) reference implementations and more.</description>
+  <name>Java Crypto</name>
+  <description>TOTP (RFC 6238) and HOTP (RFC 4226) reference implementations and more.</description>
+  <url>https://github.com/oliveryasuna/crypto</url>
+  <inceptionYear>2021</inceptionYear>
+  <licenses>
+    <license>
+      <name>BSD 3-Clause</name>
+      <url>https://opensource.org/licenses/BSD-3-Clause</url>
+      <comments>Copyright 2021 Oliver Yasuna</comments>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <organization>
+    <name>Oliver Yasuna</name>
+    <url>https://oliveryasuna.github.io/</url>
+  </organization>
+  <developers>
+    <developer>
+      <id>oliver-yasuna</id>
+
+      <name>Oliver Yasuna</name>
+      <url>https://oliveryasuna.github.io/</url>
+
+      <timezone>America/New_York</timezone>
+    </developer>
+  </developers>
+  <contributors/>
+
+  <!--==================================================
+  ==== Environment
+  ==================================================-->
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/oliveryasuna/crypto/issues</url>
+  </issueManagement>
+  <ciManagement/>
+
+  <mailingLists/>
+
+  <scm>
     <url>https://github.com/oliveryasuna/crypto</url>
-    <inceptionYear>2021</inceptionYear>
-    <licenses>
-        <license>
-            <name>BSD 3-Clause</name>
-            <url>https://opensource.org/licenses/BSD-3-Clause</url>
-            <comments>Copyright 2021 Oliver Yasuna</comments>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    <organization>
-        <name>Oliver Yasuna</name>
-        <url>https://oliveryasuna.github.io/</url>
-    </organization>
-    <developers>
-        <developer>
-            <id>oliver-yasuna</id>
+    <connection>scm:git:git://github.com/oliveryasuna/crypto.git</connection>
+    <developerConnection>scm:git:git://github.com/oliveryasuna/crypto.git</developerConnection>
+  </scm>
 
-            <name>Oliver Yasuna</name>
-            <url>https://oliveryasuna.github.io/</url>
+  <repositories/>
+  <pluginRepositories/>
 
-            <timezone>America/New_York</timezone>
-        </developer>
-    </developers>
-    <contributors/>
+  <distributionManagement/>
 
-    <!--==================================================
-    ==== Environment
-    ==================================================-->
-
-    <issueManagement>
-        <system>GitHub</system>
-        <url>https://github.com/oliveryasuna/crypto/issues</url>
-    </issueManagement>
-    <ciManagement/>
-
-    <mailingLists/>
-
-    <scm>
-        <url>https://github.com/oliveryasuna/crypto</url>
-        <connection>scm:git:git://github.com/oliveryasuna/crypto.git</connection>
-        <developerConnection>scm:git:git://github.com/oliveryasuna/crypto.git</developerConnection>
-    </scm>
-
-    <repositories/>
-    <pluginRepositories/>
-
-    <distributionManagement/>
-
-    <profiles/>
+  <profiles/>
 
 </project>
